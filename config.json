@@ -1,0 +1,25 @@
+{
+  "credentials": "test",
+  "data_path": "server/data.json",
+  "bind_address": "127.0.0.1:8080",
+  "moonlight_default_http_port": 47989,
+  "pair_device_name": "roth",
+  "webrtc_ice_servers": [
+    {
+      "urls": [
+        "turn:157.66.101.155:3478"
+      ],
+      "username": "test",
+      "credential": "test123"
+    }
+  ],
+  "webrtc_port_range": null,
+  "webrtc_nat_1to1": null,
+  "webrtc_network_types": [
+    "udp4",
+    "udp6"
+  ],
+  "web_path_prefix": "",
+  "certificate": null,
+  "streamer_path": "./streamer"
+}
