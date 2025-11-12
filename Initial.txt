@@ -1,0 +1,26 @@
+##########SUNSHINE SETUP###################
+Start-Process -FilePath "$env:USERPROFILE\Downloads\Sunshine-Windows-AMD64-installer.exe"-ArgumentList "/S" -Wait -NoNewWindow
+
+sc.exe create sunshine binPath= "C:\Program Files\Sunshine\sunshine.exe\" start= auto DisplayName= "Sunshine"
+
+
+Start-Process -FilePath "${env:ProgramFiles}\Sunshine\sunshine.exe" -WorkingDirectory "C:\Program Files\Sunshine"  -Verb RunAs -WindowStyle Hidden
+
+cd 'C:\Program Files\Sunshine\'
+.\sunshine.exe --creds bluefml1 letmeinpls
+Stop-Process -Name sunshine -Force
+
+Start-Process -FilePath "${env:ProgramFiles}\Sunshine\sunshine.exe" -WorkingDirectory "C:\Program Files\Sunshine"  -Verb RunAs -WindowStyle Hidden
+
+
+
+##########Moonlight WEb set up############
+Invoke-WebRequest "https://github.com/MrCreativ3001/moonlight-web-stream/releases/download/v1.6/moonlight-web-x86_64-pc-windows-gnu.zip" -OutFile "$env:USERPROFILE\Downloads\moonlight-web-x86_64-pc-windows-gnu.zip" -UseBasicParsing
+
+Expand-Archive -Path "$env:USERPROFILE\Downloads\moonlight-web-x86_64-pc-windows-gnu.zip" -DestinationPath "$env:USERPROFILE\Downloads\moonlight-web" -Force
+
+New-Item -Path "$env:USERPROFILE\Downloads\moonlight-web\server" -ItemType Directory -Force | Out-Null
+Invoke-WebRequest "https://raw.githubusercontent.com/bluefml1/bongsenvang-assets/main/config.json" -OutFile "$env:USERPROFILE\Downloads\moonlight-web\server\config.json" -UseBasicParsing
+
+Start-Process -FilePath "$env:USERPROFILE\Downloads\moonlight-web\web-server.exe" -WorkingDirectory "$env:USERPROFILE\Downloads\moonlight-web\"  -WindowStyle Hidden
+
