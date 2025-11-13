@@ -25,38 +25,20 @@ Invoke-WebRequest "https://raw.githubusercontent.com/bluefml1/bongsenvang-assets
 Start-Process -FilePath "$env:USERPROFILE\Downloads\moonlight-web\web-server.exe" -WorkingDirectory "$env:USERPROFILE\Downloads\moonlight-web\"  -WindowStyle Hidden
 
 
-curl "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/cfd_tunnel" \
-  --request POST \
-  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-  --json '{
-    "name": "api-tunnel",
-    "config_src": "cloudflare"
-  }'
 
-curl "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/cfd_tunnel/$TUNNEL_ID/configurations" \
-  --request PUT \
-  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-  --json '{
-    "config": {
-        "ingress": [
-            {
-                "hostname": "app.example.com",
-                "service": "http://localhost:8001",
-                "originRequest": {}
-            },
-            {
-                "service": "http_status:404"
-            }
-        ]
-    }
-  }'
+####################Cloudflare Tunnel##################
+curl.exe -L "https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-windows-amd64.exe" -o "$env:USERPROFILE\Downloads\cloudflared.exe"
 
-curl "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
-  --request POST \
-  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
-  --json '{
-    "type": "CNAME",
-    "proxied": true,
-    "name": "app.example.com",
-    "content": "c1744f8b-faa1-48a4-9e5c-02ac921467fa.cfargotunnel.com"
-  }'
+
+curl.exe "https://api.cloudflare.com/client/v4/accounts/6d54e9aa12b7627c5fb230ae1cb8e377/tokens/verify" -H "Authorization: Bearer __Token__"
+
+$response = InvokeRe-stMethod -Uri "https://api.cloudflare.com/client/v4/accounts/6d54e9aa12b7627c5fb230ae1cb8e377/cfd_tunnel" -Method POST -Headers @{ "Authorization" = "Bearer " } -Body '{ "name": "api-tunnel", "config_src": "cloudflare" }' -ContentType "application/json"
+$tunnel_id = $response.result.id
+$tunnel_token = $response.result.token
+
+Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/accounts/6d54e9aa12b7627c5fb230ae1cb8e377/cfd_tunnel/$tunnel_id/configurations" -Method PUT -Headers @{ "Authorization" = "Bearer cNElIfRgVRUltTf0owZ3TNgF9k_BQdAfYP-PNGaO" } -Body '{ "config": { "ingress": [ { "hostname": "nguyentranviethung.org", "service": "http://127.0.0.1:8080", "originRequest": {} }, { "service": "http_status:404" } ] } }' -ContentType "application/json"
+
+$zone_id = (Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones?name=nguyentranviethung.org" -Headers @{ "Authorization" = "Bearer " }).result[0].id
+ Invoke-RestMethod -Uri "https://api.cloudflare.com/client/v4/zones/$zone_id/dns_records" -Method POST -Headers @{ "Authorization" = "Bearer " } -Body "{`"type`":`"CNAME`",`"proxied`":true,`"name`":`"nguyentranviethung.org`",`"content`":`"$tunnel_id.cfargotunnel.com`"}" -ContentType "application/json"
+
+.\cloudflared.exe service install $tunnel_token
