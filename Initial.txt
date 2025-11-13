@@ -24,3 +24,39 @@ Invoke-WebRequest "https://raw.githubusercontent.com/bluefml1/bongsenvang-assets
 
 Start-Process -FilePath "$env:USERPROFILE\Downloads\moonlight-web\web-server.exe" -WorkingDirectory "$env:USERPROFILE\Downloads\moonlight-web\"  -WindowStyle Hidden
 
+
+curl "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/cfd_tunnel" \
+  --request POST \
+  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  --json '{
+    "name": "api-tunnel",
+    "config_src": "cloudflare"
+  }'
+
+curl "https://api.cloudflare.com/client/v4/accounts/$ACCOUNT_ID/cfd_tunnel/$TUNNEL_ID/configurations" \
+  --request PUT \
+  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  --json '{
+    "config": {
+        "ingress": [
+            {
+                "hostname": "app.example.com",
+                "service": "http://localhost:8001",
+                "originRequest": {}
+            },
+            {
+                "service": "http_status:404"
+            }
+        ]
+    }
+  }'
+
+curl "https://api.cloudflare.com/client/v4/zones/$ZONE_ID/dns_records" \
+  --request POST \
+  --header "Authorization: Bearer $CLOUDFLARE_API_TOKEN" \
+  --json '{
+    "type": "CNAME",
+    "proxied": true,
+    "name": "app.example.com",
+    "content": "c1744f8b-faa1-48a4-9e5c-02ac921467fa.cfargotunnel.com"
+  }'
