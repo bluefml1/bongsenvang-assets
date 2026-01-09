@@ -1,5 +1,5 @@
 {
-  "credentials": "null",
+  "credentials": null,
   "data_path": "server/data.json",
   "bind_address": "127.0.0.1:8080",
   "moonlight_default_http_port": 47989,
