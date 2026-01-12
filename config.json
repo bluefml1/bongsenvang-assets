@@ -7,21 +7,10 @@
   "webrtc_ice_servers": [
     {
       "urls": [
-        "stun:stun.cloudflare.com:3478",
-        "stun:stun.cloudflare.com:53"
-      ]
-    },
-    {
-      "urls": [
-        "turn:turn.cloudflare.com:3478?transport=udp",
-        "turn:turn.cloudflare.com:3478?transport=tcp",
-        "turns:turn.cloudflare.com:5349?transport=tcp",
-        "turn:turn.cloudflare.com:53?transport=udp",
-        "turn:turn.cloudflare.com:80?transport=tcp",
-        "turns:turn.cloudflare.com:443?transport=tcp"
+        "turn:103.90.227.223:3478"
       ],
-      "username": "g06168c5ca4c1775e5b940831fb847e93a4bd33eb7695bebe18a771871885a9e",
-      "credential": "5916caa0ae32eb05f3f77d51b1d3e13b13508b7806c03b4ab4f9dfd1dba1e8d8"
+      "username": "test",
+      "credential": "test123"
     }
   ],
   "webrtc_port_range": null,
