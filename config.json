@@ -7,7 +7,7 @@
   "webrtc_ice_servers": [
     {
       "urls": [
-        "turn:103.252.123.110:3478"
+        "turn:36.50.232.229:3478"
       ],
       "username": "test",
       "credential": "test123"
