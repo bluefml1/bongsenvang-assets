@@ -9,7 +9,7 @@
       "urls": [
         "turn:36.50.232.229:3478?transport=udp",
         "turn:36.50.232.229:3478?transport=tcp",
-        "turn:36.50.232.229:5349?transport=tcp"
+        "turns:36.50.232.229:5349?transport=tcp"
       ],
       "username": "test",
       "credential": "test123"
